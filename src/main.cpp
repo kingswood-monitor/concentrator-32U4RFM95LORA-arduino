@@ -17,9 +17,11 @@ void setup()
 
   LoRa.setPins(NSS, NRESET, DIO0);
 
-  Serial.begin(9600);
+  Serial.begin(115200);
   while (!Serial)
     ;
+
+  Serial1.begin(9600);
 
   Serial.println("LoRa Receiver Callback");
 
