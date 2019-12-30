@@ -49,16 +49,16 @@ void onReceive(int packetSize)
   digitalWrite(LED_BUILTIN, HIGH);
 
   // received a packet
-  Serial.print("Received packet '");
 
   // read packet
   for (int i = 0; i < packetSize; i++)
   {
-    Serial.print((char)LoRa.read());
+    Serial1.print((char)LoRa.read());
   }
+  Serial1.print("\n");
 
   // print RSSI of packet
-  Serial.print("' with RSSI ");
+  Serial.print("Received packet with RSSI ");
   Serial.println(LoRa.packetRssi());
 
   digitalWrite(LED_BUILTIN, LOW);
