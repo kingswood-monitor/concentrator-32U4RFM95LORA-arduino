@@ -1,9 +1,8 @@
 #include <SPI.h>
 #include <LoRa.h>
 
-#ifdef ARDUINO_SAMD_MKRWAN1300
-#error "This example is not compatible with the Arduino MKR WAN 1300 board!"
-#endif
+// pin assignments
+#define LED_BUILTIN 13
 
 // feather32u4 pins
 #define NSS 8
@@ -14,6 +13,8 @@ void onReceive(int packetSize);
 
 void setup()
 {
+  pinMode(LED_BUILTIN, OUTPUT);
+
   LoRa.setPins(NSS, NRESET, DIO0);
 
   Serial.begin(9600);
@@ -43,6 +44,8 @@ void loop()
 
 void onReceive(int packetSize)
 {
+  digitalWrite(LED_BUILTIN, HIGH);
+
   // received a packet
   Serial.print("Received packet '");
 
@@ -55,4 +58,6 @@ void onReceive(int packetSize)
   // print RSSI of packet
   Serial.print("' with RSSI ");
   Serial.println(LoRa.packetRssi());
+
+  digitalWrite(LED_BUILTIN, LOW);
 }
