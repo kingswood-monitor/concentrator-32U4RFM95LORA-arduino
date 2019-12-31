@@ -30,11 +30,17 @@ void setup()
   Serial.begin(115200);
   while (!Serial)
     ;
-  Serial.println("Kingswood LoRa Receiver");
+
+  Serial.println("===========================================================");
+  Serial.println();
+  Serial.print("Kingswood LoRa Receiver v.");
+  Serial.println(FIMWARE_VERSION);
+  Serial.println();
   Serial.print("Firmware filename : ");
   Serial.println(FIRMWARE_FILENAME);
-  Serial.print("Firmware version  : ");
-  Serial.println(FIMWARE_VERSION);
+  Serial.println();
+  Serial.println("===========================================================");
+  Serial.println();
 
   Serial1.begin(9600);
 
