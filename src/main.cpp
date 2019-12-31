@@ -1,5 +1,15 @@
+/*
+ * feather32u4_rfm9x-arduino-lora433RX
+ * 
+ * Firmware for the LoRa receiver. 
+ * Receives packet from LoRa transmitter, packages as a string, and send to Serial1 port.
+ */
+
 #include <SPI.h>
 #include <LoRa.h>
+
+#define FIRMWARE_FILENAME "feather32u4_rfm9x-arduino-lora433RX"
+#define FIMWARE_VERSION 1.0
 
 // pin assignments
 #define LED_BUILTIN 13
@@ -20,10 +30,13 @@ void setup()
   Serial.begin(115200);
   while (!Serial)
     ;
+  Serial.println("Kingswood LoRa Receiver");
+  Serial.print("Firmware filename : ");
+  Serial.println(FIRMWARE_FILENAME);
+  Serial.print("Firmware version  : ");
+  Serial.println(FIMWARE_VERSION);
 
   Serial1.begin(9600);
-
-  Serial.println("LoRa Receiver Callback");
 
   if (!LoRa.begin(433E6))
   {
@@ -46,20 +59,28 @@ void loop()
 
 void onReceive(int packetSize)
 {
+  // received a packet - flash the LED
   digitalWrite(LED_BUILTIN, HIGH);
 
-  // received a packet
-
-  // read packet
-  for (int i = 0; i < packetSize; i++)
+  // construct a string from the packet bytes
+  char *buf = malloc(sizeof(char) * packetSize + 1);
+  int i;
+  for (i = 0; i < packetSize; i++)
   {
-    Serial1.print((char)LoRa.read());
+    buf[i] = ((char)LoRa.read());
   }
-  Serial1.print("\n");
+  buf[i] = '\0';
+
+  // send it
+  Serial1.print(buf);
 
   // print RSSI of packet
-  Serial.print("Received packet with RSSI ");
+  Serial.print("Received packet: ");
+  Serial.print(buf);
+  Serial.print(" with RSSI ");
   Serial.println(LoRa.packetRssi());
+
+  free(buf);
 
   digitalWrite(LED_BUILTIN, LOW);
 }
