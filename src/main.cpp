@@ -81,7 +81,7 @@ void onReceive(int packetSize)
   Serial1.print(buf);
 
   // print RSSI of packet
-  Serial.print("Received packet: ");
+  Serial.print("RX packet: ");
   Serial.print(buf);
   Serial.print(" with RSSI ");
   Serial.println(LoRa.packetRssi());
