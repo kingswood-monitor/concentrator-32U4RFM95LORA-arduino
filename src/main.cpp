@@ -28,8 +28,7 @@ void setup()
   LoRa.setPins(NSS, NRESET, DIO0);
 
   Serial.begin(115200);
-  while (!Serial)
-    ;
+  delay(1000);
 
   Serial.println("===========================================================");
   Serial.println();
