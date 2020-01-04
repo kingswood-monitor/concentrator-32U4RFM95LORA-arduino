@@ -18,24 +18,25 @@ void onReceive(int packetSize);
 
 void setup()
 {
-  pinMode(LED_BUILTIN, OUTPUT);
-
-  LoRa.setPins(NSS, NRESET, DIO0);
-
+  // start the serial ports
   Serial.begin(115200);
-  delay(10000);
+  Serial1.begin(9600);
+  delay(2000);
 
   // print the firmware banner information
   printBanner(FIRMWARE_TITLE, FIRMWARE_FILENAME, FIRMWARE_VERSION, DEVICE_ID);
 
-  Serial1.begin(9600);
+  // set the radio pins
+  LoRa.setPins(NSS, NRESET, DIO0);
 
+  // start the radio
+  Serial.println("Starting radio");
   if (!LoRa.begin(433E6))
   {
-    Serial.println("Starting LoRa failed!");
     while (1)
-      ;
+      Serial.print('.');
   }
+  Serial.println("Radio started");
 
   // register the receive callback
   LoRa.onReceive(onReceive);
