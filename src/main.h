@@ -2,7 +2,7 @@
 
 #define FIRMWARE_TITLE "Kingswood LoRa Receiver"
 #define FIRMWARE_FILENAME "feather32u4_rfm9x-arduino-lora433RX"
-#define FIRMWARE_VERSION "1.0"
+#define FIRMWARE_VERSION "1.1"
 #define DEVICE_ID "FEATHER32U4LORA-002"
 
 // pin assignments
