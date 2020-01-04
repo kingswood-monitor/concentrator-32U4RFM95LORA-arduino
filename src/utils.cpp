@@ -8,12 +8,11 @@ void printBanner(const char *firmware_title, const char *firmware_filename, cons
     Serial.println("======================================================================");
     Serial.println(firmware_title);
     Serial.println("----------------------------------------------------------------------");
-    Serial.print("Firmware filename   : ");
+    Serial.print("Firmware filename : ");
     Serial.print(firmware_filename);
-    Serial.print(" V.");
+    Serial.print(" V");
     Serial.println(firmware_version);
-    Serial.print("Sensor ID           : ");
+    Serial.print("Device ID         : ");
     Serial.println(deviceID);
     Serial.println("======================================================================");
-    Serial.println();
 }
