@@ -2,7 +2,10 @@
  * feather32u4_rfm9x-arduino-lora433RX
  * 
  * Firmware for the LoRa receiver. 
- * Receives packet from LoRa transmitter, packages as a string, and send to Serial1 port.
+ * Receives packet from LoRa transmitter. 
+ * Deserialises. 
+ * Adds in LoRa signal quality data. 
+ * Reserialises and sends to Serial1 port.
  */
 
 #include <SPI.h>
