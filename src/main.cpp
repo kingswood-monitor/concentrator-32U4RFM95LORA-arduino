@@ -10,11 +10,17 @@
 
 #include <SPI.h>
 #include <LoRa.h>
+#include <ArduinoJson.h>
 
 #include "main.h"
 #include "utils.h"
 
 void onReceive(int packetSize);
+
+// Create the empty JSON document - https://arduinojson.org/v6/assistant/
+// Note: it's larger than the arriving document because we are adding LoRa info
+const size_t capacity = JSON_OBJECT_SIZE(1) + JSON_OBJECT_SIZE(2) + 2 * JSON_OBJECT_SIZE(3) + JSON_OBJECT_SIZE(4);
+StaticJsonDocument<capacity> doc;
 
 void setup()
 {
@@ -52,11 +58,9 @@ void loop()
 
 void onReceive(int packetSize)
 {
-  // received a packet - flash the LED
-  digitalWrite(LED_BUILTIN, HIGH);
 
   // construct a string from the packet bytes
-  char *buf = malloc(sizeof(char) * packetSize + 1);
+  char *buf = (char *)malloc(sizeof(char) * packetSize + 1);
   int i;
   for (i = 0; i < packetSize; i++)
   {
@@ -64,16 +68,35 @@ void onReceive(int packetSize)
   }
   buf[i] = '\0';
 
-  // send it
-  Serial1.print(buf);
+  // deserialise it
+  DeserializationError error = deserializeJson(doc, buf);
+  if (!error)
+  {
+    // add LoRa quality data
+    JsonObject obj = doc["status"].as<JsonObject>();
+    JsonObject status_lora = obj.createNestedObject("lora");
+    status_lora["packetRssi"] = LoRa.packetRssi();
+    status_lora["packetSnr"] = LoRa.packetSnr();
+    status_lora["packetFrequencyError"] = LoRa.packetFrequencyError();
 
-  // print RSSI of packet
-  Serial.print("RX packet: ");
-  Serial.print(buf);
-  Serial.print(" with RSSI ");
-  Serial.println(LoRa.packetRssi());
+    // reserialise it
+    char output[255];
+    serializeJson(doc, output);
 
+    // send it
+    Serial1.print(output);
+
+    // report it
+    Serial.println("---");
+    serializeJsonPretty(doc, Serial);
+    Serial.println();
+
+    // flash the LED
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(200);
+    digitalWrite(LED_BUILTIN, LOW);
+  }
+
+  // clear memory
   free(buf);
-
-  digitalWrite(LED_BUILTIN, LOW);
 }
