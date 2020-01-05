@@ -12,8 +12,22 @@
 #include <LoRa.h>
 #include <ArduinoJson.h>
 
-#include "main.h"
 #include "utils.h"
+
+#define FIRMWARE_TITLE "Kingswood LoRa Receiver"
+#define FIRMWARE_FILENAME "feather32u4_rfm9x-arduino-lora433RX"
+#define FIRMWARE_VERSION "1.1"
+#define DEVICE_ID "FEATHER32U4LORA-002"
+
+// pin assignments
+#define LED_BUILTIN 13 // HIGH is ON
+
+// feather32u4 LoRa pin assignments
+#define NSS 8
+#define NRESET 4
+#define DIO0 7
+
+#define DEBUG true // supress serial printing if false
 
 void onReceive(int packetSize);
 
