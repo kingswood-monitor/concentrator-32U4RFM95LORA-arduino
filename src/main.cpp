@@ -38,18 +38,17 @@ StaticJsonDocument<capacity> doc;
 
 void setup()
 {
-  // start the serial ports
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, LOW);
+
   Serial.begin(115200);
   Serial1.begin(9600);
   delay(2000);
 
-  // print the firmware banner information
   printBanner(FIRMWARE_TITLE, FIRMWARE_FILENAME, FIRMWARE_VERSION, DEVICE_ID);
 
-  // set the radio pins
   LoRa.setPins(NSS, NRESET, DIO0);
 
-  // start the radio
   Serial.println("Starting radio");
   if (!LoRa.begin(433E6))
   {
@@ -58,10 +57,8 @@ void setup()
   }
   Serial.println("Radio started");
 
-  // register the receive callback
   LoRa.onReceive(onReceive);
 
-  // put the radio into receive mode
   LoRa.receive();
 }
 
@@ -84,32 +81,38 @@ void onReceive(int packetSize)
 
   // deserialise it
   DeserializationError error = deserializeJson(doc, buf);
-  if (!error)
+  if (error)
   {
-    // add LoRa quality data
-    JsonObject obj = doc["status"].as<JsonObject>();
-    JsonObject status_lora = obj.createNestedObject("lora");
-    status_lora["packetRssi"] = LoRa.packetRssi();
-    status_lora["packetSnr"] = LoRa.packetSnr();
-    status_lora["packetFrequencyError"] = LoRa.packetFrequencyError();
+    return;
+  }
 
-    // reserialise it
-    char output[255];
-    serializeJson(doc, output);
+  // add LoRa quality data
+  JsonObject obj = doc["status"].as<JsonObject>();
+  JsonObject status_lora = obj.createNestedObject("lora");
+  status_lora["packetRssi"] = LoRa.packetRssi();
+  status_lora["packetSnr"] = LoRa.packetSnr();
+  status_lora["packetFrequencyError"] = LoRa.packetFrequencyError();
 
-    // send it
-    Serial1.print(output);
+  // reserialise it
+  char output[255];
+  serializeJson(doc, output);
 
-    // report it
+  // send it
+  Serial1.print(output);
+
+  // report it
+  if (DEBUG)
+  {
     Serial.println("---");
     serializeJsonPretty(doc, Serial);
     Serial.println();
-
-    // flash the LED
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(200);
-    digitalWrite(LED_BUILTIN, LOW);
   }
+
+  // flash the LED
+  Serial.println("Flashing");
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(10000);
+  digitalWrite(LED_BUILTIN, LOW);
 
   // clear memory
   free(buf);
