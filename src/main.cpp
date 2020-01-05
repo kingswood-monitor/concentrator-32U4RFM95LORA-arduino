@@ -1,5 +1,5 @@
 /*
- * feather32u4_rfm9x-arduino-lora433RX
+ * kingswood-monitor-lora-concentrator
  * 
  * Firmware for the LoRa receiver. 
  * Receives packet from LoRa transmitter. 
@@ -14,8 +14,8 @@
 
 #include "utils.h"
 
-#define FIRMWARE_TITLE "Kingswood LoRa Receiver"
-#define FIRMWARE_FILENAME "feather32u4_rfm9x-arduino-lora433RX"
+#define FIRMWARE_TITLE "Kingswood Monitor LoRa Concentrator"
+#define FIRMWARE_FILENAME "kingswood-monitor-lora-concentrator"
 #define FIRMWARE_VERSION "1.1"
 #define DEVICE_ID "FEATHER32U4LORA-002"
 
@@ -27,7 +27,7 @@
 #define NRESET 4
 #define DIO0 7
 
-#define DEBUG true // supress serial printing if false
+#define DEBUG false // supress serial printing if false
 
 void onReceive(int packetSize);
 
