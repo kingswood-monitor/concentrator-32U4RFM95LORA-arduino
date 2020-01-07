@@ -14,9 +14,9 @@
 
 #include "utils.h"
 
-#define FIRMWARE_TITLE "Kingswood Monitor LoRa Concentrator"
-#define FIRMWARE_FILENAME "kingswood-monitor-lora-concentrator"
+#define FIRMWARE_TITLE "LoRa Concentrator"
 #define FIRMWARE_VERSION "1.1"
+#define FIRMWARE_NAME "concentrator-32U4RFM95LORA-arduino"
 #define DEVICE_ID "FEATHER32U4LORA-002"
 
 // pin assignments
@@ -45,7 +45,7 @@ void setup()
   Serial1.begin(9600);
   delay(2000);
 
-  printBanner(FIRMWARE_TITLE, FIRMWARE_FILENAME, FIRMWARE_VERSION, DEVICE_ID);
+  printBanner(FIRMWARE_TITLE, FIRMWARE_NAME, FIRMWARE_VERSION, DEVICE_ID);
 
   LoRa.setPins(NSS, NRESET, DIO0);
 
