@@ -12,12 +12,16 @@
 #include <LoRa.h>
 #include <ArduinoJson.h>
 
-#include "utils.h"
+#include "sensor-utils.h"
 
-#define FIRMWARE_TITLE "LoRa Concentrator"
-#define FIRMWARE_VERSION "1.1"
-#define FIRMWARE_NAME "concentrator-32U4RFM95LORA-arduino"
-#define DEVICE_ID "FEATHER32U4LORA-002"
+// firmware info
+#define FIRMWARE_NAME "LoRa / WiFi concentrator"
+#define FIRMWARE_VERSION "0.2"
+#define FIRMWARE_SLUG "concentrator-32U4RFM95LORA-arduino"
+#define JSON_PROTOCOL "1.1"
+#define FIRMWARE_MCU "32U4RFM95LORA"
+#define FIRMWARE_OS "arduino"
+#define DEVICE_ID "002" // comment out if device has Sys.DeviceID()
 
 // pin assignments
 #define LED_BUILTIN 13 // HIGH is ON
@@ -45,7 +49,7 @@ void setup()
   Serial1.begin(9600);
   delay(2000);
 
-  printBanner(FIRMWARE_TITLE, FIRMWARE_NAME, FIRMWARE_VERSION, DEVICE_ID);
+  utils::printBanner(FIRMWARE_NAME, FIRMWARE_VERSION, FIRMWARE_SLUG, JSON_PROTOCOL, FIRMWARE_MCU, FIRMWARE_OS, DEVICE_ID);
 
   LoRa.setPins(NSS, NRESET, DIO0);
 
